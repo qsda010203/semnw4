@@ -1,0 +1,81 @@
+a)PING
+
+Client Side:
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+class client {
+    public static void main(String[] args) throws Exception {
+        String str;
+        int c = 0;
+        long t1, t2;
+        Socket s = new Socket("localhost", 5555);
+        DataInputStream dis = new DataInputStream(s.getInputStream());
+        PrintStream out = new PrintStream(s.getOutputStream());
+        while (c < 4) {
+            t1 = System.currentTimeMillis();
+            str = "Welcome to networks";
+            out.println(str);
+            System.out.println(dis.readLine());
+            t2 = System.currentTimeMillis();
+            System.out.println("TLL : " + (t2 - t1) + "ms");
+            c++;
+        }
+        s.close();
+    }
+}
+
+Server Side:
+
+import java.io.*;
+import java.net.*;
+
+class server {
+    public static void main(String[] args) throws Exception {
+        ServerSocket ss = new ServerSocket(5555);
+        Socket s = ss.accept();
+        int c = 0;
+
+        while (c < 4) {
+            DataInputStream dis = new DataInputStream(s.getInputStream());
+            PrintStream out = new PrintStream(s.getOutputStream());
+            String str = dis.readLine();
+            out.println("Reply from " + InetAddress.getLocalHost() + " Length " + str.length());
+            c++;
+        }
+
+        s.close();
+        ss.close();
+    }
+}
+
+b)TraceRoute
+
+import java.io.*;
+import java.net.*;
+class Traceroute
+{
+    public static void main(String args[])
+    {
+        try
+        {
+            String str;
+            System.out.print(" Enter the IP Address to be Traced : ");
+            BufferedReader buf1=new BufferedReader(new InputStreamReader(System.in));
+            String ip=buf1.readLine();
+            Runtime H=Runtime.getRuntime();
+            Process p=H.exec("traceroute " + ip);
+            InputStream in=p.getInputStream();
+            BufferedReader buf2=new BufferedReader(new InputStreamReader(in));
+            while((str=buf2.readLine())!=null)
+            {
+                System.out.println(" " + str);
+            }
+        } catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+}
